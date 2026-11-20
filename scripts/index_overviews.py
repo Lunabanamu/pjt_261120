@@ -28,7 +28,6 @@ def index_overviews():
                     report=db.scalar(select(Report).where(Report.report_id==rid).with_for_update())
                     if report is None:continue
                     if report.revision!=rev or report.overview!=overview:
-                        # 동시 변경이 있다면 잘못된 벡터를 덮어쓰지 않고 다음 배치/재실행 때 처리.
                         print(f'SKIP 변경된 보고서 {rid}');continue
                     target=db.get(ReportEmbedding,rid)
                     if target is None:target=ReportEmbedding(report_id=rid);db.add(target)
